@@ -43,6 +43,18 @@
         state: present
         key: "{{ copy_local_key }}"
 
+#    - name: Copy SSH keys from root to sudo user
+#      command: rsync --archive --chown={{ create_user  }}:{{ create_user }} ~/.ssh /home/{{ create_user }}
+#      become: yes
+
+#    - name: Synchronize .ssh directories of root and non-root sudo user on the server
+#      synchronize:
+#        src: /root/.ssh
+#        dest: /{{ create_user }}/.ssh
+#        archive: yes
+#        rsync_opts: ['--chown={{ create_user  }}:{{ create_user }}']
+#      delegate_to: "{{ inventory_hostname }}"
+
     - name: Disable password authentication for root
       lineinfile:
         path: /etc/ssh/sshd_config

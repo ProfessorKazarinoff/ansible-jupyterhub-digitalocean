@@ -1,21 +1,66 @@
 # ansible-jupyterhub-digitalocean
 
-A repo of Ansible playbooks to install JupyterHub on a Digital Ocean Server using Ansible
+A repo of Ansible playbooks to install JupyterHub on a Digital Ocean Server using Ansible. Can only be used on WSL, MacOS or Linux. Does not work on Windows 10.
 
-# Install Ansible Locally
+## Install Ansible Locally
 
-# Make sure there is a local SSH key
+```
+python -m venv venv
+source venv/bin/activate
+python -m pip install -r requirements.txt
+ansible --verison
+# ansible 2.9.9
+```
 
-# Modify ```vars/default.yml```
+## Make sure there is a local SSH key
 
-# Set up a Droplet on DigitalOcean
+```
+cat ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub
+# if not present, run $ ssh-keygen
+```
+
+## Modify ```vars/default.yml```
+
+Fill in the non-root sudo users username, apt pages in ```vars/default.yml```
+
+## Set up a Droplet on DigitalOcean
 
 Set up a Droplet (a virtual private server) on Digital Ocean. Make sure to copy the IP address
 
-# Create ```hosts``` file
-
-# Run the ansible playbook
+## Create ```hosts``` file
 
 ```
-ansible-playbook playbook.yml -i hosts -u root
+cp hosts_example hosts
+```
+
+Add the Digital Ocean Droplet IP address into the ```hosts``` file.
+
+## Ping the DO server
+
+Make sure you can connect to the Digital Ocean server:
+
+```
+ansible -i hosts -m ping
+# pong
+```
+
+## Check the ```initial_server_setup.yml``` playbook for syntax errors
+
+```
+ansible-playbook --syntax-check initial_server_setup.yml
+```
+
+## Run the ansible playbook to complete the initial server setup
+
+```
+ansible-playbook -i hosts -u root playbook.yml
+```
+
+## Try to log into the server with the non-root sudo user
+
+Use SSH to log into the server as the non-root sudo user
+
+```
+ssh peter@234.XXX.23.XX
 ```
