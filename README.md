@@ -52,6 +52,10 @@ ansible -i hosts -m ping all
 # pong
 ```
 
+If this is the first time communicating with the server, it will ask you to verify the host key. Answer ```yes```.
+
+If this doesn't work. Try to log into the server with SSH. May need to remove a known host ```ssh-keygen -f "/home/peter/.ssh/known_hosts" -R "XX.XXXX.XX"```
+
 ## Check the ```initial_server_setup.yml``` playbook for syntax errors
 
 ```
@@ -61,7 +65,7 @@ ansible-playbook -i hosts --syntax-check initial_server_setup.yml
 ## Run the ansible playbook to complete the initial server setup
 
 ```
-ansible-playbook -i hosts -u root initial_server_setup.yml
+ansible-playbook -i hosts initial_server_setup.yml
 ```
 
 ## Try to log into the server with the non-root sudo user
