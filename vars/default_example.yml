@@ -1,0 +1,12 @@
+# vars/default_example.yml
+# modify for each deployment
+---
+create_user: my_non-root_sudo_username
+sys_packages: ['curl', 'wget', 'vim', 'git', 'tree', 'ufw', 'whois']
+conda_packages: ['numpy','pandas','matplotlib','jupyter','xlrd','sympy']
+conda_forge_packages: ['jupyterhub','oauthenticator','pint']
+domain_name: mydomain.org
+email: my.email@college.edu
+my_college_domain: mycollege.edu
+my_college_name: My College Name
+my_college_user_name: first.last
