@@ -1,6 +1,0 @@
-# vars/default.yml
-
----
-create_user: peter
-copy_local_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
-sys_packages: ['curl', 'wget', 'vim', 'git', 'tree', 'ufw', 'whois']

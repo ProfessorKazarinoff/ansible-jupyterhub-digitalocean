@@ -22,11 +22,15 @@ cat ~/.ssh/id_rsa.pub
 
 ## Modify ```vars/default.yml```
 
-Fill in the non-root sudo users username, apt pages in ```vars/default.yml```
+Fill in the non-root sudo users username, apt packages, etc. in ```vars/default.yml```
+
+```
+cp vars/default_example.yml vars/default.yml
+```
 
 ## Set up a Droplet on DigitalOcean
 
-Set up a Droplet (a virtual private server) on Digital Ocean. Make sure to copy the IP address
+Create a Droplet (a virtual private server) on Digital Ocean. Make sure to copy the IP address.
 
 ## Create ```hosts``` file
 

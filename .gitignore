@@ -237,4 +237,6 @@ venv/
 
 # End of https://www.toptal.com/developers/gitignore/api/ansible
 
+# Specific Per build configuration
 hosts
+vars/default.yml
