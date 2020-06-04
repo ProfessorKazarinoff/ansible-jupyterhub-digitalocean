@@ -37,23 +37,14 @@
         create_home: true
         shell: /bin/bash
 
-    - name: Set authorized key for remote user
-      authorized_key:
-        user: "{{ create_user }}"
-        state: present
-        key: "{{ copy_local_key }}"
-
-#    - name: Copy SSH keys from root to sudo user
-#      command: rsync --archive --chown={{ create_user  }}:{{ create_user }} ~/.ssh /home/{{ create_user }}
-#      become: yes
-
-#    - name: Synchronize .ssh directories of root and non-root sudo user on the server
-#      synchronize:
-#        src: /root/.ssh
-#        dest: /{{ create_user }}/.ssh
-#        archive: yes
-#        rsync_opts: ['--chown={{ create_user  }}:{{ create_user }}']
-#      delegate_to: "{{ inventory_hostname }}"
+    - name: Synchronize .ssh directories of root and non-root sudo user on the server
+      synchronize:
+        src: /root/.ssh
+        dest: /home/{{ create_user }}
+        archive: yes
+        rsync_opts:
+          - "--chown={{ create_user  }}:{{ create_user }}"
+      delegate_to: "{{ inventory_hostname }}"
 
     - name: Disable password authentication for root
       lineinfile:
@@ -64,7 +55,7 @@
 
 # Install Packages
     - name: Update apt
-      apt: update_cache=yes
+      apt: update_cache=yes cache_valid_time=3600
 
     - name: Install required system packages
       apt: name={{ sys_packages }} state=latest

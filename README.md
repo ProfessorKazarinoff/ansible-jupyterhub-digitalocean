@@ -17,7 +17,7 @@ ansible --verison
 ```
 cat ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub
-# if not present, run $ ssh-keygen
+# if not present, run $ ssh-keygen -b 4096
 ```
 
 ## Modify ```vars/default.yml```
@@ -41,20 +41,23 @@ Add the Digital Ocean Droplet IP address into the ```hosts``` file.
 Make sure you can connect to the Digital Ocean server:
 
 ```
-ansible -i hosts -m ping
+ansible -i hosts --list-hosts all
+# verify the IP address of the server
+
+ansible -i hosts -m ping all
 # pong
 ```
 
 ## Check the ```initial_server_setup.yml``` playbook for syntax errors
 
 ```
-ansible-playbook --syntax-check initial_server_setup.yml
+ansible-playbook -i hosts --syntax-check initial_server_setup.yml
 ```
 
 ## Run the ansible playbook to complete the initial server setup
 
 ```
-ansible-playbook -i hosts -u root playbook.yml
+ansible-playbook -i hosts -u root initial_server_setup.yml
 ```
 
 ## Try to log into the server with the non-root sudo user
