@@ -1,0 +1,20 @@
+# jupyterhub_install.yml
+#
+# An Ansible playbook to download Miniconda, create an environment and install JuptyerHub
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Check if conda executable already exists
+      stat: path=/opt/miniconda3/bin/conda
+      register: conda_executable_path
+    - name: Check if Python executable already exists
+      stat: path=/opt/miniconda3/bin/python
+      register: python_executable_path
+    - name: Print out conda and python executable paths
+      debug:
+        msg: conda conda executable path at path=/opt/miniconda3/bin/conda
+      when: conda_executable_path.stat.exists and python_executable_path.stat.exists
