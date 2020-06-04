@@ -1,0 +1,64 @@
+# jupyterhub_install.yml
+#
+# An Ansible playbook to download Miniconda, create an environment and install JuptyerHub
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+  # Check if conda, python or the miniconda installer exhist
+    - name: Check if conda executable already exists
+      stat: path=/opt/miniconda3/bin/conda
+      register: conda_executable_path
+    - name: Check if Python executable already exists
+      stat: path=/opt/miniconda3/bin/python
+      register: python_executable_path
+    - name: Check if the Miniconda 3 installer script has been downloaded
+      stat: path=/tmp/install-miniconda.sh
+      register: miniconda_installer_path
+    - name: Check if /opt/miniconda3/ directory already exists
+      stat: path=/opt/miniconda3
+      register: miniconda_install_directory_path
+    - name: Print out conda and python executable paths
+      debug:
+        msg: conda conda executable path at path=/opt/miniconda3/bin/conda
+      when: conda_executable_path.stat.exists and python_executable_path.stat.exists
+
+# Download and Install Miniconda, add to PATH
+    - name: Download Miniconda3 .sh installer script
+      get_url:
+        url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        dest: /tmp/install-miniconda.sh
+        checksum: md5:87e77f097f6ebb5127c77662dfc3165e
+        mode: 0550
+      when: not miniconda_installer_path.stat.exists
+    - name: Create miniconda3 directory
+      become: True
+      file:
+        path: /opt/miniconda3
+        state: directory
+        owner: "{{ create_user }}"
+        mode: 755
+        recurse: yes
+      when: not miniconda_install_directory_path.stat.exists
+    - name: Run the Miniconda installer
+      shell: /tmp/install-miniconda.sh -b -u -p /opt/miniconda3
+      when: not conda_executable_path.stat.exists and not python_executable_path.stat.exists
+    - name: conda - read permission for all
+      become: True
+      file:
+        path: /opt/miniconda3
+        mode: +r
+        recurse: yes
+    - name: conda - execution permission for all
+      become: True
+      file:
+        path: /opt/miniconda3/bin
+        mode: +x
+        recurse: yes
+    - name: Add conda bin dir to system-wide $PATH.
+      copy:
+        dest: /etc/profile.d/custom-path.sh
+        content: 'PATH=$PATH:/opt/miniconda3/bin'

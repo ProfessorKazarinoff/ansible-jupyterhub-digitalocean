@@ -75,3 +75,17 @@ Use SSH to log into the server as the non-root sudo user
 ```
 ssh peter@234.XXX.23.XX
 ```
+
+## Run the miniconda_install.yml playbook
+
+```
+ansible-playbook -i hosts miniconda_install.yml
+```
+
+
+## Log into the server and see if conda works
+
+```
+ssh peter@XXX.XXXX.XXXX
+conda --version
+```
