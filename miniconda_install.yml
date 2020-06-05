@@ -1,4 +1,4 @@
-# jupyterhub_install.yml
+# miniconda_install.yml
 #
 # An Ansible playbook to download Miniconda, create an environment and install JuptyerHub
 ---

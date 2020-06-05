@@ -1,0 +1,38 @@
+# jupyterhub_install.yml
+#
+# An Ansible playbook to download Miniconda, create an environment and install JuptyerHub
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+  # Check if conda environment exhists
+    - name: Check if jupyterhubenv conda environment exhists
+      stat: path=/opt/miniconda3/envs/jupyterhubenv
+      register: jupyterhubenv_path
+    - name: Check if jupyterhubenv has a Python executable
+      stat: path=path=/opt/miniconda3/envs/jupyterhubenv/bin/python
+      register: jupyterhubenv_python_executable_path
+
+# Creat jupyterhubenv and install conda packages
+
+    - name: Create conda env jupyterhub
+      shell: /opt/miniconda3/bin/conda create -y --prefix /opt/miniconda3/envs/jupyterhubenv
+      become: yes
+      when: not jupyterhubenv_path.stat.exists
+
+    - name: Install NumPy Matplotlib Pandas Jupyter xlrd SymPy
+      shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhub numpy matplotlib pandas jupyter xlrd sympy
+
+    - name: Install JupyterHub and JupyterLab
+      shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhub -c conda-forge jupyterhub jupyterlab oauthenticator
+
+    - name: jupyterhub env - read permission for all
+      file:
+        path: /opt/miniconda3/envs/jupyterhub
+        mode: +r
+        recurse: yes
+      become: yes
+
