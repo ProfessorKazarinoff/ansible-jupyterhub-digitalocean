@@ -8,7 +8,7 @@
     - vars/default.yml
 
   tasks:
-  # Check if conda environment exhists
+  # Check if the conda environment jupyterhubenv exhists
     - name: Check if jupyterhubenv conda environment exhists
       stat: path=/opt/miniconda3/envs/jupyterhubenv
       register: jupyterhubenv_path
@@ -16,23 +16,40 @@
       stat: path=path=/opt/miniconda3/envs/jupyterhubenv/bin/python
       register: jupyterhubenv_python_executable_path
 
-# Creat jupyterhubenv and install conda packages
+  # Create jupyterhubenv and install conda packages
 
-    - name: Create conda env jupyterhub
+    - name: Create conda env jupyterhubenv
       shell: /opt/miniconda3/bin/conda create -y --prefix /opt/miniconda3/envs/jupyterhubenv
       become: yes
-      when: not jupyterhubenv_path.stat.exists
+      when: not jupyterhubenv_path.stat.exists and not jupyterhubenv_python_executable_path.stat.exists
 
     - name: Install NumPy Matplotlib Pandas Jupyter xlrd SymPy
-      shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhub numpy matplotlib pandas jupyter xlrd sympy
+      shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhubenv {{ item }}
+      with_items:
+        - numpy
+        - matplotlib
+        - pandas
+        - jupyter
+        - xlrd
+        - sympy
+        - requests
 
-    - name: Install JupyterHub and JupyterLab
-      shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhub -c conda-forge jupyterhub jupyterlab oauthenticator
+    - name: Install JupyterHub and JupyterLab from the conda-forge channel
+      shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhubenv -c conda-forge {{ item }}
+      with_items:
+        - jupyterhub
+        - jupyterlab
+        - oauthenticator
+        - pint
 
-    - name: jupyterhub env - read permission for all
+    - name: jupyterhubenv - read permission for all
       file:
-        path: /opt/miniconda3/envs/jupyterhub
+        path: /opt/miniconda3/envs/jupyterhubenv
         mode: +r
         recurse: yes
       become: yes
 
+  # Create the /etc/jupyterhub directory
+  # Copy over or create the jupyterhub_config.py
+  # Create the systemd file
+  # Run jupyterhub as a system service

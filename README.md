@@ -88,4 +88,22 @@ ansible-playbook -i hosts miniconda_install.yml
 ```
 ssh peter@XXX.XXXX.XXXX
 conda --version
+# conda 4.8.2
+```
+
+## Run the jupyterhub_install.yml playbook
+
+```
+ansible-playbook -i hosts jupyterhub_install.yml
+```
+
+## Log into server and try to activate the jupyterhubenv and type a Python command
+
+```
+ssh peter@XXX.XX.XXX.X
+conda activate jupyterhubenv   # might have to type $ conda init && source .bashrc
+python
+>>> import numpy
+>>> numpy.__version__
+>>> exit()
 ```

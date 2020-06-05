@@ -21,12 +21,8 @@
     - name: Check if /opt/miniconda3/ directory already exists
       stat: path=/opt/miniconda3
       register: miniconda_install_directory_path
-    - name: Print out conda and python executable paths
-      debug:
-        msg: conda conda executable path at path=/opt/miniconda3/bin/conda
-      when: conda_executable_path.stat.exists and python_executable_path.stat.exists
 
-# Download and Install Miniconda, add to PATH
+  # Download and Install Miniconda, add to PATH
     - name: Download Miniconda3 .sh installer script
       get_url:
         url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh

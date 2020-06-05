@@ -10,6 +10,7 @@
     - vars/default.yml
 
   tasks:
+  # apt update and apt upgrade - *** NEEDS TO BE BOTH APT-GET UPDATE && APT-GET UPGRADE ***
     - name: Install Prerequisites
       apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
 
