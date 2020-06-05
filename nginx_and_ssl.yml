@@ -1,6 +1,6 @@
-# jupyterhub_install.yml
+# nginx_and_ssl.yml
 #
-# An Ansible playbook to download Miniconda, create an environment and install JuptyerHub
+# An Ansible playbook to install nginx, configure it, get an SSL cirt and run as as system servce
 ---
 - hosts: all
   become: true

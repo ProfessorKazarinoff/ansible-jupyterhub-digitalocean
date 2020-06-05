@@ -10,10 +10,13 @@
     - vars/default.yml
 
   tasks:
-  # apt update and apt upgrade - *** NEEDS TO BE BOTH APT-GET UPDATE && APT-GET UPGRADE ***
-    - name: Install Prerequisites
-      apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
 
+ # Run apt update && apt upgrade
+    - name: sudo apt update && sudo apt upgrade 
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #one day
 # Sudo Group Setup
     - name: Make sure we have a 'wheel' group
       group:
@@ -46,7 +49,7 @@
         rsync_opts:
           - "--chown={{ create_user  }}:{{ create_user }}"
       delegate_to: "{{ inventory_hostname }}"
-
+# Disable root login using a password
     - name: Disable password authentication for root
       lineinfile:
         path: /etc/ssh/sshd_config
@@ -55,9 +58,6 @@
         line: 'PermitRootLogin prohibit-password'
 
 # Install Packages
-    - name: Update apt
-      apt: update_cache=yes cache_valid_time=3600
-
     - name: Install required system packages
       apt: name={{ sys_packages }} state=latest
 

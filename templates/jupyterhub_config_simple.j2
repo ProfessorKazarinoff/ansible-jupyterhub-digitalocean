@@ -1,0 +1,11 @@
+# /etc/jupyterhub/jupyterhub_config.py
+
+c = get_config()
+c.JupyterHub.log_level = 10
+
+# Cookie Secret Files
+c.JupyterHub.cookie_secret_file = '/srv/jupyterhub/jupyterhub_cookie_secret'
+c.ConfigurableHTTPProxy.auth_token = '/srv/jupyterhub/proxy_auth_token'
+
+c.Authenticator.whitelist = {'{{ create_user }}'}
+c.Authenticator.admin_users = {'{{ create_user }}'}

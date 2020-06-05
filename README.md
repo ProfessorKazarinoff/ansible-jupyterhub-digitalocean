@@ -107,3 +107,17 @@ python
 >>> numpy.__version__
 >>> exit()
 ```
+
+## Link up domain name to server
+
+The next step requires a domain name is hooked up to the server. Once the hookup is made, it can take some time for the DNS records to propigate.
+
+```
+ansible-playbook -i hosts nginx_and_ssl.yml
+```
+
+## View the running installation
+
+browse to your domain name
+
+## Google OAuth
