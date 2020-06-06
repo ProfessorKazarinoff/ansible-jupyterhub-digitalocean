@@ -18,24 +18,6 @@
         group: "{{ create_user }}"
         mode: '0770'
       become: yes
-    - name: Template a file to /etc/jupyterhub/college_id.json
-      template:
-        # need to make this a relative path source
-        src: vars/college_id.json
-        dest: /etc/jupyterhub/college_id.json
-        owner: root
-        group: "{{ create_user }}"
-        mode: '0770'
-      become: yes
-    - name: Template a file to /etc/jupyterhub/users.json
-      template:
-        # need to make this a relative path source
-        src: vars/users.json
-        dest: /etc/jupyterhub/users.json
-        owner: root
-        group: "{{ create_user }}"
-        mode: '0770'
-      become: yes
     - name: Template a file to /etc/jupyterhub/cull_idle_servers.py
       template:
         # need to make this a relative path source

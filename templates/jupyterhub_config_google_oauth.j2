@@ -27,10 +27,9 @@ c.LocalGoogleOAuthenticator.client_secret = google_oauth['web']['client_secret']
 c.LocalGoogleOAuthenticator.oauth_callback_url = google_oauth["web"]["redirect_uris"][0]
 c.LocalGoogleOAuthenticator.create_system_users = True
 c.Authenticator.add_user_cmd = ['adduser', '-q', '--gecos', '""', '--disabled-password', '--force-badname']
-with open('/etc/jupyterhub/college_id.json') as f:
-    college_id = json.load(f)
-c.LocalGoogleOAuthenticator.hosted_domain = [college_id["domain"]]  # replace with mycollege.edu, must be a list of strings
-c.LocalGoogleOAuthenticator.login_service = college_id["name"]  # replace with 'My College Name'
+
+c.LocalGoogleOAuthenticator.hosted_domain = ["{{ college_domain }}"]  # replace with mycollege.edu, must be a list of strings
+c.LocalGoogleOAuthenticator.login_service = "{{ college_name }}"  # replace with 'My College Name'
 
 ## Extra Configuration
 
@@ -47,12 +46,10 @@ c.JupyterHub.cleanup_proxy = True
 c.JupyterHub.cleanup_servers = True
 
 ## Users
-with open('/etc/jupyterhub/users.json','r') as f:
-    users_dict = json.load(f)
-c.Authenticator.whitelist = set(users_dict['users'])
-c.Authenticator.admin_users = set(users_dict['admin_users'])
+c.Authenticator.whitelist = set({{ jupyterhub_users }})
+c.Authenticator.admin_users = set({{ jupyterhub_admin_users }})
 
-# Cull Idle Servers
+## Cull Idle Servers
 # place cull_idle_servers.py in /etc/jupyterhub
 c.JupyterHub.services = [
         {

@@ -2,6 +2,16 @@
 
 A repo of Ansible playbooks to install JupyterHub on a Digital Ocean Server using Ansible. Can only be used on WSL, MacOS or Linux. Does not work on Windows 10.
 
+## Create DO server and connect domain name to it
+
+First create the DigitalOcean server, add domain to DigitalOcean DNS. Link domain name to server (the DNS hookup takes the longest). Note the IP address of the server.
+
+```
+ns1.digitalocean.com
+ns2.digitalocean.com
+ns3.digitalocean.com
+```
+
 ## Install Ansible Locally
 
 ```
@@ -28,10 +38,6 @@ Fill in the non-root sudo users username, apt packages, etc. in ```vars/default.
 cp vars/default_example.yml vars/default.yml
 ```
 
-## Set up a Droplet on DigitalOcean
-
-Create a Droplet (a virtual private server) on Digital Ocean. Make sure to copy the IP address.
-
 ## Create ```hosts``` file
 
 ```
@@ -40,14 +46,16 @@ cp hosts_example hosts
 
 Add the Digital Ocean Droplet IP address into the ```hosts``` file.
 
+```
+ansible -i hosts --list-hosts all
+# verify the IP address of the server
+```
+
 ## Ping the DO server
 
 Make sure you can connect to the Digital Ocean server:
 
 ```
-ansible -i hosts --list-hosts all
-# verify the IP address of the server
-
 ansible -i hosts -m ping all
 # pong
 ```
@@ -75,7 +83,6 @@ ssh peter@234.XXX.23.XX
 ```
 ansible-playbook -i hosts miniconda_install.yml
 ```
-
 
 ## Log into the server and see if conda works
 
@@ -109,9 +116,9 @@ jupyterhub          # need to be root (b/c of key files)
 
 ## Link up domain name to server
 
-The next step requires a domain name is hooked up to the server. Once the hookup is made, it can take some time for the DNS records to propigate.
+The next step requires a domain name is hooked up to the server. Once the hookup is made, it can take some time for the DNS records to propigate. Can look at https://www.whatsmydns.net/ to see if changeover is compete.
 
-## Get an SSL Cert
+## Get the SSL Cert
 
 ```
 ansible-playbook -i hosts ssl.yml
@@ -125,15 +132,11 @@ ansible-playbook -i hosts nginx_install.yml
 
 ## View the running installation
 
-browse to your domain name
+Browse to your domain name
 
 Could create a new user on the server over SSH and use the new user's name and password to log into Jupyterhub
 
 ## Google OAuth
-
-In the ```vars/``` directory, fill in the ```users.json```, ```college_id.json``` files.
-
-Next, you'll need to get google oauth credentials and save them to ```client_secret.json``` details below:
 
 Log into the Google Developer Console and hook up the domain as a known site. 
 
@@ -154,7 +157,3 @@ ansible-playbook -i hosts google_oauth.yml
 ```
 
 You should now be able to log into your your JupyterHub server with google usernames and passwords
-
-### TO DO
-
-Make the final jupyterhub_config.py file use more stuff from default.yml and use less seperate json files that have to be filled out.
