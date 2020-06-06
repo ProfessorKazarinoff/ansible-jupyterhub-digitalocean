@@ -240,3 +240,6 @@ venv/
 # Specific Per build configuration
 hosts
 vars/default.yml
+vars/client_secret.json
+vars/users.json
+vars/college_id.json

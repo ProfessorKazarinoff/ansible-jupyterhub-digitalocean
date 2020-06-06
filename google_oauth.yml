@@ -1,0 +1,64 @@
+# google_oauth.yml
+#
+# An Ansible playbook to use Google OAuth on Jupyterhub
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+  # Copy over the client_secret.json and new jupyterhub config file
+    - name: Template a file to /etc/jupyterhub/google_oauth_credentials.json
+      template:
+        # need to make this a relative path source
+        src: vars/client_secret.json
+        dest: /etc/jupyterhub/google_oauth_credentials.json
+        owner: root
+        group: "{{ create_user }}"
+        mode: '0770'
+      become: yes
+    - name: Template a file to /etc/jupyterhub/college_id.json
+      template:
+        # need to make this a relative path source
+        src: vars/college_id.json
+        dest: /etc/jupyterhub/college_id.json
+        owner: root
+        group: "{{ create_user }}"
+        mode: '0770'
+      become: yes
+    - name: Template a file to /etc/jupyterhub/users.json
+      template:
+        # need to make this a relative path source
+        src: vars/users.json
+        dest: /etc/jupyterhub/users.json
+        owner: root
+        group: "{{ create_user }}"
+        mode: '0770'
+      become: yes
+    - name: Template a file to /etc/jupyterhub/cull_idle_servers.py
+      template:
+        # need to make this a relative path source
+        src: templates/cull_idle_servers.j2
+        dest: /etc/jupyterhub/cull_idle_servers.py
+        owner: root
+        group: "{{ create_user }}"
+        mode: '0770'
+      become: yes
+    - name: Template a file to /etc/jupyterhub/jupyterhub_config.py
+      template:
+        src: templates/jupyterhub_config_google_oauth.j2
+        dest: /etc/jupyterhub/jupyterhub_config.py
+        owner: root
+        group: "{{ create_user }}"
+        mode: '0770'
+      become: yes
+      # Restart JupyterHub and make sure Nginx is running
+    - name: Restart Jupyterhub to use new config
+      systemd:
+        state: restarted
+        name: jupyterhub
+    - name: Make sure Nginx is running
+      systemd:
+        state: started
+        name: nginx

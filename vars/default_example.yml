@@ -7,6 +7,8 @@ conda_packages: ['numpy','pandas','matplotlib','jupyter','xlrd','sympy',requests
 conda_forge_packages: ['jupyterhub','oauthenticator','pint']
 domain_name: mydomain.org
 email: my.email@college.edu
-my_college_domain: mycollege.edu
-my_college_name: My College Name
-my_college_user_name: first.last
+college_domain: mycollege.edu
+college_name: My College Name
+college_user_name: first.last
+jupyterhub_users: ['first.last','gabby']
+jupyterhub_admin_users: ['first.last','peter']

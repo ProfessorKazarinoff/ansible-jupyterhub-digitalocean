@@ -93,3 +93,8 @@
       systemd:
         state: restarted
         name: nginx
+
+    - name: Let ufw allow the Nginx Full profile through
+      ufw:
+        rule: allow
+        name: Nginx Full

@@ -85,6 +85,8 @@ conda --version
 # conda 4.8.2
 ```
 
+May have to run ```conda init``` and ```source ~/.bashrc```
+
 ## Run the jupyterhub_install.yml playbook
 
 ```
@@ -125,4 +127,34 @@ ansible-playbook -i hosts nginx_install.yml
 
 browse to your domain name
 
+Could create a new user on the server over SSH and use the new user's name and password to log into Jupyterhub
+
 ## Google OAuth
+
+In the ```vars/``` directory, fill in the ```users.json```, ```college_id.json``` files.
+
+Next, you'll need to get google oauth credentials and save them to ```client_secret.json``` details below:
+
+Log into the Google Developer Console and hook up the domain as a known site. 
+
+ - API & Services --> Domain Verification --> Add Domain. Your domain should be listed. (can take a bit)
+ - Credentials --> + Create Credentials --> OAuth Client ID
+   - Application Type: Web application
+   - Authorized JavaScript origins: https://mydomain.org
+   - Authorized redirect URIs: https://mydomain.org/hub/oauth_callback
+   - Create
+ - Save keys as json using the download button to the right of the keys
+ - move the key file into the ```vars``` directory and save as ```client_secret.json```
+
+
+Then run the ```google_oauth.yml``` playbook
+
+```
+ansible-playbook -i hosts google_oauth.yml
+```
+
+You should now be able to log into your your JupyterHub server with google usernames and passwords
+
+### TO DO
+
+Make the final jupyterhub_config.py file use more stuff from default.yml and use less seperate json files that have to be filled out.
