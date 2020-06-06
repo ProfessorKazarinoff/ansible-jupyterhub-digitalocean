@@ -1,0 +1,20 @@
+# ssl.yml
+#
+# An Ansible playbook to create an SSL cirt
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+  # Check if files already exhist on the server
+    - name: Check if fullchain.pem file exhists
+      stat: path=/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+      register: fullchain_path
+    - name: Check if privkey.pem files exhists
+      stat: path=/etc/letsencrypt/live/{{ domain_name }}/privkey.pem
+      register: privkey_path
+    - name: Check if the certbot has been downloaded
+      stat: path=/srv/jupyterhub/proxy_auth_token
+      register: certbot_path

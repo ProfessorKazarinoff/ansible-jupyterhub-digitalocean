@@ -54,13 +54,7 @@ ansible -i hosts -m ping all
 
 If this is the first time communicating with the server, it will ask you to verify the host key. Answer ```yes```.
 
-If this doesn't work. Try to log into the server with SSH. May need to remove a known host ```ssh-keygen -f "/home/peter/.ssh/known_hosts" -R "XX.XXXX.XX"```
-
-## Check the ```initial_server_setup.yml``` playbook for syntax errors
-
-```
-ansible-playbook -i hosts --syntax-check initial_server_setup.yml
-```
+If this doesn't work. Try to log into the server with SSH. May need to remove a known host ```ssh-keygen -f "/home/peter/.ssh/known_hosts" -R "XX.XXXX.XX"``
 
 ## Run the ansible playbook to complete the initial server setup
 
@@ -100,20 +94,31 @@ ansible-playbook -i hosts jupyterhub_install.yml
 ## Log into server and try to activate the jupyterhubenv and type a Python command
 
 ```
-ssh peter@XXX.XX.XXX.X
+ssh root@XXX.XX.XXX.X
 conda activate jupyterhubenv   # might have to type $ conda init && source .bashrc
 python
 >>> import numpy
 >>> numpy.__version__
 >>> exit()
+cd /etc/jupyterhub 
+jupyterhub          # need to be root (b/c of key files)
+# ctrl-c to exit
 ```
 
 ## Link up domain name to server
 
 The next step requires a domain name is hooked up to the server. Once the hookup is made, it can take some time for the DNS records to propigate.
 
+## Get an SSL Cert
+
 ```
-ansible-playbook -i hosts nginx_and_ssl.yml
+ansible-playbook -i hosts ssl.yml
+```
+
+## Nginx installation, configuration
+
+```
+ansible-playbook -i hosts nginx_install.yml
 ```
 
 ## View the running installation

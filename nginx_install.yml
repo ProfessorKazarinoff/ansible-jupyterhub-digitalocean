@@ -1,0 +1,95 @@
+# nginx_install.yml
+#
+# An Ansible playbook to install and configure nginx, and run nginx as as system service
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+  # Check if files already exist on the server
+
+    - name: Check if fullchain.pem file exhists
+      stat: path=/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+      register: fullchain_path
+    - name: Check if privkey.pem files exhists
+      stat: path=/etc/letsencrypt/live/{{ domain_name }}/privkey.pem
+      register: privkey_path
+
+    - name: Check if SSL certs are in place
+      debug:
+        msg: The SSL certs are missing!!!
+      when: not fullchain_path.stat.exists or not privkey_path.stat.exists
+  
+  # Update apt cache and upgrade
+    - name: sudo apt update && sudo apt upgrade 
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #one day
+
+  # Create dhparam.pem file
+    - name: Create dhparam.pem file with openssl using shell... This can take a minute or two, be patient
+      shell: openssl dhparam -out /srv/jupyterhub/dhparam.pem 2048
+      become: yes
+      args:
+        executable: /bin/bash
+        creates: /srv/jupyterhub/dhparam.pem
+    - name: Change dhparam.pem file permissions to 600
+      file:
+        path: /srv/jupyterhub/dhparam.pem
+        owner: root
+        group: sudo
+        mode: '0600'
+      become: yes
+    - name: Check if the dhparam.pem file exists exhists
+      stat: path=/srv/jupyterhub/dhparam.pem
+      register: dhparam_path
+    - name: See if the dhparam.pem file is present
+      debug:
+        msg: The dhparam.pem file is missing!!!
+      when: not dhparam_path.stat.exists
+  # Nginx
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+    - name: Template a file to /etc/nginx/nginx.conf
+      template:
+        src: templates/nginx_conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: wheel
+        mode: '0644'
+      become: yes
+      when: fullchain_path.stat.exists and privkey_path.stat.exhists
+    - name: Template a file to /etc/nginx/sites-available
+      template:
+        src: templates/sites-available.j2
+        dest: /etc/nginx/sites-available/jupyterhub
+        owner: root
+        group: wheel
+        mode: '0644'
+      become: yes
+      when: fullchain_path.stat.exists and privkey_path.stat.exhists
+    - name: create symlink from site-available to sites-enabled
+      file:
+        src: /etc/nginx/sites-available/jupyterhub
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+      become: yes
+      when: fullchain_path.stat.exists and privkey_path.stat.exhists
+
+  # restart systemd and start nginx and jupyterhub
+    - name: force systemd to reread configs (2.4 and above)
+      systemd:
+        daemon_reload: yes
+    - name: Start/Make sure the jupyterhub systemd service is running
+      systemd:
+        state: started
+        name: jupyterhub
+    - name: Make sure Nginx is running
+      systemd:
+        state: restarted
+        name: nginx
