@@ -42,22 +42,11 @@
 
     - name: Install NumPy Matplotlib Pandas Jupyter xlrd SymPy
       shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhubenv {{ item }}
-      with_items:
-        - numpy
-        - matplotlib
-        - pandas
-        - jupyter
-        - xlrd
-        - sympy
-        - requests
+      with_items: "{{ conda_packages }}"
 
     - name: Install JupyterHub and JupyterLab from the conda-forge channel
       shell: /opt/miniconda3/bin/conda install -y --prefix /opt/miniconda3/envs/jupyterhubenv -c conda-forge {{ item }}
-      with_items:
-        - jupyterhub
-        - jupyterlab
-        - oauthenticator
-        - pint
+      with_items: "{{ conda_forge_packages }}"
 
     - name: jupyterhubenv - read permission for all
       file:

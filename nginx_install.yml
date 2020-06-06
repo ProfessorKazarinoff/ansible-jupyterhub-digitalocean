@@ -10,10 +10,10 @@
   tasks:
   # Check if files already exist on the server
 
-    - name: Check if fullchain.pem file exhists
+    - name: Check if fullchain.pem file exists
       stat: path=/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
       register: fullchain_path
-    - name: Check if privkey.pem files exhists
+    - name: Check if privkey.pem files exists
       stat: path=/etc/letsencrypt/live/{{ domain_name }}/privkey.pem
       register: privkey_path
 
@@ -43,7 +43,7 @@
         group: sudo
         mode: '0600'
       become: yes
-    - name: Check if the dhparam.pem file exists exhists
+    - name: Check if the dhparam.pem file exists exists
       stat: path=/srv/jupyterhub/dhparam.pem
       register: dhparam_path
     - name: See if the dhparam.pem file is present
@@ -63,7 +63,7 @@
         group: wheel
         mode: '0644'
       become: yes
-      when: fullchain_path.stat.exists and privkey_path.stat.exhists
+      when: fullchain_path.stat.exists and privkey_path.stat.exists
     - name: Template a file to /etc/nginx/sites-available
       template:
         src: templates/sites-available.j2
@@ -72,14 +72,14 @@
         group: wheel
         mode: '0644'
       become: yes
-      when: fullchain_path.stat.exists and privkey_path.stat.exhists
+      when: fullchain_path.stat.exists and privkey_path.stat.exists
     - name: create symlink from site-available to sites-enabled
       file:
         src: /etc/nginx/sites-available/jupyterhub
         dest: /etc/nginx/sites-enabled/default
         state: link
       become: yes
-      when: fullchain_path.stat.exists and privkey_path.stat.exhists
+      when: fullchain_path.stat.exists and privkey_path.stat.exists
 
   # restart systemd and start nginx and jupyterhub
     - name: force systemd to reread configs (2.4 and above)
