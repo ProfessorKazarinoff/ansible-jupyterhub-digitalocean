@@ -19,7 +19,7 @@
       stat: path=/srv/jupyterhub/proxy_auth_token
       register: certbot_path
  # Run apt update && apt upgrade
-    - name: sudo apt update && sudo apt upgrade 
+    - name: sudo apt update && sudo apt upgrade
       apt:
         upgrade: yes
         update_cache: yes

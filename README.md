@@ -172,6 +172,12 @@ Ansible also has syntax check
 ansible-playbook -i hosts --syntax-check jupyterhub_install.yml
 ```
 
+The ansible-lint tool is installed with requirements.txt. Can be run agaist playbooks and gives nice detailed output about what could be changed.
+
+```
+ansible-lint jupyterhub_install.yml
+```
+
 Can run playbooks "dry" without executing the commands
 
 ```

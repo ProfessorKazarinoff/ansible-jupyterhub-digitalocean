@@ -84,7 +84,7 @@
         state: directory
       become: yes
       when: not jupyterhub_srv_directory_path.stat.exists
-    
+
     # cookie_secret
     - name: Create cookie secret file with openssl using shell
       shell: openssl rand -hex 32 > /srv/jupyterhub/jupyterhub_cookie_secret
@@ -99,7 +99,7 @@
         group: sudo
         mode: '0600'
       become: yes
-    
+
     # proxy_auth_token
     - name: Create proxy_auth_token file with openssl using shell
       shell: openssl rand -hex 32 > /srv/jupyterhub/proxy_auth_token
