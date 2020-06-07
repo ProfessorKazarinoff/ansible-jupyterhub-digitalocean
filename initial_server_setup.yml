@@ -11,13 +11,13 @@
 
   tasks:
 
- # Run apt update && apt upgrade
+   # Run apt update && apt upgrade
     - name: sudo apt update && sudo apt upgrade 
       apt:
         upgrade: yes
         update_cache: yes
         cache_valid_time: 86400 #one day
-# Sudo Group Setup
+  # Sudo Group Setup
     - name: Make sure we have a 'wheel' group
       group:
         name: wheel
@@ -31,7 +31,7 @@
         line: '%wheel ALL=(ALL) NOPASSWD: ALL'
         validate: '/usr/sbin/visudo -cf %s'
 
-# User + Key Setup
+  # User + Key Setup
     - name: Create a new regular user with sudo privileges
       user:
         name: "{{ user_name }}"
@@ -49,7 +49,8 @@
         rsync_opts:
           - "--chown={{ user_name  }}:{{ user_name }}"
       delegate_to: "{{ inventory_hostname }}"
-# Disable root login using a password
+
+  # Disable root login using a password
     - name: Disable password authentication for root
       lineinfile:
         path: /etc/ssh/sshd_config
@@ -57,11 +58,11 @@
         regexp: '^#?PermitRootLogin'
         line: 'PermitRootLogin prohibit-password'
 
-# Install Packages
+  # Install Packages
     - name: Install required system packages
       apt: name={{ sys_packages }} state=latest
 
-# UFW Setup
+  # UFW Setup
     - name: UFW - Allow SSH connections
       ufw:
         rule: allow

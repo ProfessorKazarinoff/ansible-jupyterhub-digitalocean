@@ -157,3 +157,23 @@ ansible-playbook -i hosts google_oauth.yml
 ```
 
 You should now be able to log into your your JupyterHub server with google usernames and passwords
+
+### Testing
+
+yamllint package is installed as part of requirements.txt. Can run yamllint on a play-book:
+
+```
+yamllint jupyterhub_install.yml
+```
+
+Ansible also has syntax check
+
+```
+ansible-playbook -i hosts --syntax-check jupyterhub_install.yml
+```
+
+Can run playbooks "dry" without executing the commands
+
+```
+ansible-playbook -i hosts jupyterhub_install.yml --check
+```
