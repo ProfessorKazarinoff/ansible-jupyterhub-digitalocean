@@ -15,7 +15,7 @@
         src: vars/client_secret.json
         dest: /etc/jupyterhub/google_oauth_credentials.json
         owner: root
-        group: "{{ create_user }}"
+        group: "{{ user_name }}"
         mode: '0770'
       become: yes
     - name: Template a file to /etc/jupyterhub/cull_idle_servers.py
@@ -24,7 +24,7 @@
         src: templates/cull_idle_servers.j2
         dest: /etc/jupyterhub/cull_idle_servers.py
         owner: root
-        group: "{{ create_user }}"
+        group: "{{ user_name }}"
         mode: '0770'
       become: yes
     - name: Template a file to /etc/jupyterhub/jupyterhub_config.py
@@ -32,7 +32,7 @@
         src: templates/jupyterhub_config_google_oauth.j2
         dest: /etc/jupyterhub/jupyterhub_config.py
         owner: root
-        group: "{{ create_user }}"
+        group: "{{ user_name }}"
         mode: '0770'
       become: yes
       # Restart JupyterHub and make sure Nginx is running

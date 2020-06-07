@@ -34,7 +34,7 @@
 # User + Key Setup
     - name: Create a new regular user with sudo privileges
       user:
-        name: "{{ create_user }}"
+        name: "{{ user_name }}"
         state: present
         groups: wheel
         append: true
@@ -44,10 +44,10 @@
     - name: Synchronize .ssh directories of root and non-root sudo user on the server
       synchronize:
         src: /root/.ssh
-        dest: /home/{{ create_user }}
+        dest: /home/{{ user_name }}
         archive: yes
         rsync_opts:
-          - "--chown={{ create_user  }}:{{ create_user }}"
+          - "--chown={{ user_name  }}:{{ user_name }}"
       delegate_to: "{{ inventory_hostname }}"
 # Disable root login using a password
     - name: Disable password authentication for root

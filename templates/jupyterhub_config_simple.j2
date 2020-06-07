@@ -7,5 +7,5 @@ c.JupyterHub.log_level = 10
 c.JupyterHub.cookie_secret_file = '/srv/jupyterhub/jupyterhub_cookie_secret'
 c.ConfigurableHTTPProxy.auth_token = '/srv/jupyterhub/proxy_auth_token'
 
-c.Authenticator.whitelist = {'{{ create_user }}'}
-c.Authenticator.admin_users = {'{{ create_user }}'}
+c.Authenticator.whitelist = {'{{ user_name }}'}
+c.Authenticator.admin_users = {'{{ user_name }}'}

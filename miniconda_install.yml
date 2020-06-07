@@ -35,7 +35,7 @@
       file:
         path: /opt/miniconda3
         state: directory
-        owner: "{{ create_user }}"
+        owner: "{{ user_name }}"
         mode: 755
         recurse: yes
       when: not miniconda_install_directory_path.stat.exists

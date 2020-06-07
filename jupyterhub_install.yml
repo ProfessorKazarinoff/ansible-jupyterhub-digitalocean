@@ -61,7 +61,7 @@
         path: /etc/jupyterhub
         state: directory
         owner: root
-        group: "{{ create_user }}"
+        group: "{{ user_name }}"
         mode: '0770'
       when: not jupyterhub_srv_directory_path.stat.exists
   # Copy over or create the jupyterhub_config.py
@@ -71,7 +71,7 @@
         src: templates/jupyterhub_config_simple.j2
         dest: /etc/jupyterhub/jupyterhub_config.py
         owner: root
-        group: "{{ create_user }}"
+        group: "{{ user_name }}"
         mode: '0770'
       become: yes
   # Create cookie secret and proxy auth token
