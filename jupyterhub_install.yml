@@ -126,12 +126,7 @@
         group: sudo
         mode: '0644'
       become: yes
-#    - name: just force systemd to reread configs (2.4 and above)
-#      systemd:
-#        daemon_reload: yes
-#    - name: Start/Make sure the jupyterhub systemd service is running
-#      systemd:
-#        state: started
-#        name: jupyterhub  
-
-  # Run jupyterhub as a system service
+    - name: just force systemd to reread configs (2.4 and above)
+      systemd:
+        daemon_reload: yes
+# JupyterHub is not started, can start it by logging into the server
