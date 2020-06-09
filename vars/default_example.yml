@@ -3,8 +3,8 @@
 ---
 user_name: peter
 sys_packages: ['curl', 'wget', 'vim', 'git', 'tree', 'ufw', 'whois']
-conda_packages: ['numpy','pandas','matplotlib','jupyter','xlrd','sympy',requests]
-conda_forge_packages: ['jupyterhub','oauthenticator','pint']
+conda_packages: ['numpy','pandas','matplotlib','jupyter','xlrd','sympy','requests']
+conda_forge_packages: ['jupyterhub','jupyterlab','oauthenticator','pint']
 domain_name: mydomain.org
 email: my.email@college.edu
 college_domain: mycollege.edu

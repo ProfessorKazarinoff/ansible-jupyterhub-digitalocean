@@ -11,7 +11,7 @@
 
   tasks:
 
-   # Run apt update && apt upgrade
+  # Run apt update && apt upgrade
     - name: sudo apt update && sudo apt upgrade 
       apt:
         upgrade: yes
