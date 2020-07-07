@@ -1,10 +1,10 @@
 # ansible-jupyterhub-digitalocean
 
-A repo of Ansible playbooks to install JupyterHub on a Digital Ocean Server using Ansible. Can only be used on WSL, MacOS or Linux. Does not work on Windows 10.
+A repo of Ansible playbooks to install JupyterHub on a Digital Ocean VPS using Ansible. Can only be used on WSL, MacOS or Linux. Does not work on Windows 10.
 
 ## Create DO server and connect domain name to it
 
-First create the DigitalOcean server, add domain to DigitalOcean DNS. Link domain name to server (the DNS hookup takes the longest). Note the IP address of the server.
+First create the DigitalOcean Droplet, add domain name to DigitalOcean DNS. Link domain name to server (the DNS hookup takes the longest). Note the IP address of the server.
 
 ```
 ns1.digitalocean.com
@@ -44,7 +44,7 @@ cp vars/default_example.yml vars/default.yml
 cp hosts_example hosts
 ```
 
-Add the Digital Ocean Droplet IP address into the ```hosts``` file.
+Add the Digital Ocean Droplet IP address into the ```hosts``` file. Verify the IP address of the Droplet.
 
 ```
 ansible -i hosts --list-hosts all
@@ -62,7 +62,7 @@ ansible -i hosts -m ping all
 
 If this is the first time communicating with the server, it will ask you to verify the host key. Answer ```yes```.
 
-If this doesn't work. Try to log into the server with SSH. May need to remove a known host ```ssh-keygen -f "/home/peter/.ssh/known_hosts" -R "XX.XXXX.XX"``
+If this doesn't work. Try to log into the server with SSH. May need to remove a known host ```ssh-keygen -f "/home/peter/.ssh/known_hosts" -R "XX.XXXX.XX"```
 
 ## Run the ansible playbook to complete the initial server setup
 
@@ -100,7 +100,7 @@ May have to run ```conda init``` and ```source ~/.bashrc```
 ansible-playbook -i hosts jupyterhub_install.yml
 ```
 
-## Log into server and try to activate the jupyterhubenv and type a Python command
+## Log into server and try to activate the ```jupyterhubenv``` and type a Python command
 
 ```
 ssh root@XXX.XX.XXX.X
@@ -160,7 +160,7 @@ You should now be able to log into your your JupyterHub server with google usern
 
 ### Testing
 
-yamllint package is installed as part of requirements.txt. Can run yamllint on a play-book:
+yamllint package is installed as part of ```requirements.txt```. Can run yamllint on a play-book:
 
 ```
 yamllint jupyterhub_install.yml
