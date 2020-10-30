@@ -25,9 +25,9 @@
     # Download and Install Miniconda, add to PATH
     - name: Download Miniconda3 .sh installer script
       get_url:
-        url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
         dest: /tmp/install-miniconda.sh
-        checksum: md5:87e77f097f6ebb5127c77662dfc3165e
+        checksum: md5:d63adf39f2c220950a063e0529d4ff74
         mode: 0550
       when: not miniconda_installer_path.stat.exists
     - name: Create miniconda3 directory

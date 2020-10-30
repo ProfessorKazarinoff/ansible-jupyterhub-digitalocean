@@ -18,7 +18,7 @@ ns3.digitalocean.com
 python -m venv venv
 source venv/bin/activate
 python -m pip install -r requirements.txt
-ansible --verison
+ansible --version
 # ansible 2.9.9
 ```
 
@@ -84,12 +84,14 @@ ssh peter@234.XXX.23.XX
 ansible-playbook -i hosts miniconda_install.yml
 ```
 
+If the command fails, check the md5 checksum that goes with the minconda installer script on https://repo.anaconda.com/miniconda/
+
 ## Log into the server and see if conda works
 
 ```
 ssh peter@XXX.XXXX.XXXX
 conda --version
-# conda 4.8.2
+# conda 4.8.3
 ```
 
 May have to run ```conda init``` and ```source ~/.bashrc```
@@ -108,6 +110,7 @@ conda activate jupyterhubenv   # might have to type $ conda init && source .bash
 python
 >>> import numpy
 >>> numpy.__version__
+# '1.19.2'
 >>> exit()
 cd /etc/jupyterhub 
 jupyterhub          # need to be root (b/c of key files)
